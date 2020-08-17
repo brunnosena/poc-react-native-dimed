@@ -1,15 +1,14 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
 
-import {Image} from 'react-native';
-
-import FeatherIcon from 'react-native-vector-icons/Feather';
+import {Image, Text} from 'react-native';
 
 import Dashboard from '../pages/Dashboard';
 import Details from '../pages/Details';
+import Profile from '../pages/Profile';
 
 import Logo from '../assets/img/logo.png';
-import {NavigationContainer} from '@react-navigation/native';
 
 const App = createStackNavigator();
 
@@ -23,9 +22,8 @@ const AppRoutes: React.FC = () => (
       initialRouteName="Dashboard">
       <App.Screen
         options={{
-          headerShown: true,
-          headerTransparent: true,
-          headerTitleStyle: {alignSelf: 'center'},
+          headerTitleAlign: 'center',
+          headerTitleStyle: {alignSelf: 'center', justifyContent: 'center'},
           headerTitle: () => <Image source={Logo} />,
         }}
         name="Dashboard"
@@ -33,17 +31,25 @@ const AppRoutes: React.FC = () => (
       />
       <App.Screen
         options={{
-          headerTransparent: true,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {alignSelf: 'center', justifyContent: 'center'},
           headerTitle: () => <Image source={Logo} />,
           headerBackTitleVisible: false,
           headerLeftContainerStyle: {
             marginLeft: 20,
           },
-
-          headerBackImage: () => <FeatherIcon name="chevron-left" size={24} />,
         }}
         name="Details"
         component={Details}
+      />
+      <App.Screen
+        options={{
+          headerTitle: () => <Text>Issue</Text>,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {alignSelf: 'center', justifyContent: 'center'},
+        }}
+        name="Profile"
+        component={Profile}
       />
     </App.Navigator>
   </NavigationContainer>
