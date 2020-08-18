@@ -4,7 +4,6 @@ import {RectButton} from 'react-native-gesture-handler';
 
 export const Container = styled.SafeAreaView`
   flex: 1;
-  align-items: center;
   justify-content: center;
   padding: 0 30px ${Platform.OS === 'android' ? 50 : 40}px;
 `;
@@ -55,6 +54,11 @@ export const TextInput = styled.TextInput`
   border-width: 2px;
   border-color: #232129;
   padding: 16px;
+`;
+
+export const MessageError = styled.Text`
+  margin-left: 0;
+  color: #c53030;
 `;
 
 export const Button = styled(RectButton)`

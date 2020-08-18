@@ -16,6 +16,7 @@ import {
   IssueDetailTitle,
   IssueDetailText,
 } from './styles';
+import {View} from 'react-native';
 
 interface RepositoryParams {
   repository: string;
@@ -73,7 +74,18 @@ const Details: React.FC = () => {
   return (
     <Container>
       <Title>
-        Dados de <Name>{routeParams.repository}</Name>
+        <View
+          style={{
+            backgroundColor: '#000',
+            marginTop: 32,
+            paddingLeft: 16,
+            paddingRight: 16,
+            paddingTop: 8,
+            paddingBottom: 8,
+            borderRadius: 24,
+          }}>
+          <Name>{routeParams.repository}</Name>
+        </View>
       </Title>
 
       {repository ? (

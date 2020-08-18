@@ -16,10 +16,8 @@ export const Title = styled.Text`
 `;
 
 export const Name = styled.Text`
-  padding: 0 16px;
-  background: #333;
-  border-radius: 10px;
   color: #fff;
+  font-size: 24px;
 `;
 
 export const RepositoryInfo = styled.View`

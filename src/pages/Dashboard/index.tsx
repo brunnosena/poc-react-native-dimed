@@ -2,20 +2,21 @@ import React, {useState, useEffect, useCallback} from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useNavigation} from '@react-navigation/native';
 
-import {KeyboardAvoidingView, ScrollView, Platform} from 'react-native';
+import {KeyboardAvoidingView, ScrollView, Platform, Text} from 'react-native';
+import api from '../../services/api';
 
 import {
   Container,
   Title,
   Content,
-  TextInput,
+  MessageError,
   Button,
   ButtonText,
   RepositoriesContainer,
   RepositoriesAvatar,
   RepositoriesName,
 } from './styles';
-import api from '../../services/api';
+import Input from '../../components/Input';
 
 export interface Repository {
   full_name: string;
@@ -26,10 +27,19 @@ export interface Repository {
   };
 }
 
+interface objError {
+  message: string;
+  isError: boolean;
+}
+
 const Dashboard: React.FC = () => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const [repositories, setRepositories] = useState<Repository[]>([]);
+  const [inputError, setInputError] = useState<objError>({
+    message: '',
+    isError: false,
+  });
 
   useEffect(() => {
     async function loadRepositories(): Promise<void> {
@@ -56,11 +66,14 @@ const Dashboard: React.FC = () => {
       const response = await api.get<Repository>(`repos/${searchValue}`);
 
       setRepositories([...repositories, response.data]);
-      // setInputError('');
-      // setNewRepo('');
+      setInputError({message: '', isError: false});
+      setSearchValue('');
     } catch (err) {
       console.log(JSON.stringify(err));
-      // setInputError('Erro na busca por esse repositório');
+      setInputError({
+        message: 'Erro na busca por esse repositório',
+        isError: true,
+      });
     }
   };
 
@@ -82,12 +95,16 @@ const Dashboard: React.FC = () => {
         <Container>
           <Title>Explore repositórios no GitHub</Title>
 
-          <TextInput
+          <Input
+            name="userRepo"
             placeholderTextColor="#B7B7CC"
             value={searchValue}
             placeholder="Digite o usuário/repositório"
             onChangeText={(value) => setSearchValue(value)}
+            error={inputError.isError}
           />
+          <MessageError>{inputError.message}</MessageError>
+
           <Button onPress={handleAddRepositories}>
             <ButtonText>Adicionar</ButtonText>
           </Button>
