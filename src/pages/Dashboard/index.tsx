@@ -34,9 +34,8 @@ const Dashboard: React.FC = () => {
   });
 
   const handleAddRepositories = async () => {
-    try {
-
-      if (!repos.find(repo => repo.full_name.toUpperCase === searchValue.toUpperCase)) {
+    try {      
+      if (!repos.find(repo => repo.full_name.toUpperCase() === searchValue.toUpperCase())) {
         const { data } = await api.get<Repository>(`repos/${searchValue}`);
 
         dispatch({
