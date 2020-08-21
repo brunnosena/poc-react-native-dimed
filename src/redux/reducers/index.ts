@@ -1,33 +1,36 @@
 import { Repository } from "../../pages/Dashboard";
 
-interface GitState {
+export interface GitState {
     repos: Repository[];
 }
 
 const INITIAL_STATE: GitState = {
-    repos: [{
-        full_name: '',
-        description: '',
-        owner: {
-            login: '',
-            avatar_url: '',
-        }
-    }]
+    repos: []
 }
+
+const buildRepo = (newRepo: Repository): Repository => {
+    return {
+        full_name: newRepo.full_name,
+        description: newRepo.description,
+        owner: {
+            login: newRepo.owner.login,
+            avatar_url: newRepo.owner.avatar_url
+        }
+    };
+};
 
 const reducer = (state: GitState = INITIAL_STATE, action: any) => {
     switch (action.type) {
-        case 'ADD_REPO':
+        case 'ADD_REPO': {
+            const newRepo = buildRepo(action.payload.repo)
+
             return {
-                repos: [...state.repos, {
-                    full_name: action.payload.repo.full_name,
-                    description: action.payload.repo.description,
-                    owner: {
-                        login: action.payload.repo.owner.login,
-                        avatar_url: action.payload.repo.owner.avatar_url
-                    }
-                }]
-            }
+                repos: [
+                    ...state.repos,
+                    newRepo
+                ]
+            };
+        }
 
         default:
             return state;

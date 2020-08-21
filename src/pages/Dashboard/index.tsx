@@ -1,23 +1,16 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
-import {useNavigation} from '@react-navigation/native';
-
-import {KeyboardAvoidingView, ScrollView, Platform, Text} from 'react-native';
+import React, { useState } from 'react';
+import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import api from '../../services/api';
-
+import Input from '../../components/Input';
+import DashboardContent from './DashboardContent';
 import {
   Container,
   Title,
-  Content,
   MessageError,
   Button,
   ButtonText,
-  RepositoriesContainer,
-  RepositoriesAvatar,
-  RepositoriesName,
 } from './styles';
-import Input from '../../components/Input';
-
 export interface Repository {
   full_name: string;
   description: string;
@@ -26,47 +19,34 @@ export interface Repository {
     avatar_url: string;
   };
 }
-
 interface objError {
   message: string;
   isError: boolean;
 }
 
 const Dashboard: React.FC = () => {
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const repos: Repository[] = useSelector((store: any) => store.repos);
   const [searchValue, setSearchValue] = useState('');
-  const [repositories, setRepositories] = useState<Repository[]>([]);
   const [inputError, setInputError] = useState<objError>({
     message: '',
     isError: false,
   });
 
-  useEffect(() => {
-    async function loadRepositories(): Promise<void> {
-      const storageRepositories = await AsyncStorage.getItem(
-        '@GitHubExplorer:repositories',
-      );
-
-      if (storageRepositories) {
-        setRepositories([...JSON.parse(storageRepositories)]);
-      }
-    }
-    loadRepositories();
-  }, []);
-
-  useEffect(() => {
-    AsyncStorage.setItem(
-      '@GitHubExplorer:repositories',
-      JSON.stringify(repositories),
-    );
-  }, [repositories]);
-
   const handleAddRepositories = async () => {
     try {
-      const response = await api.get<Repository>(`repos/${searchValue}`);
 
-      setRepositories([...repositories, response.data]);
-      setInputError({message: '', isError: false});
+      if (!repos.find(repo => repo.full_name.toUpperCase === searchValue.toUpperCase)) {
+        const { data } = await api.get<Repository>(`repos/${searchValue}`);
+
+        dispatch({
+          type: 'ADD_REPO', payload: {
+            repo: data
+          }
+        });
+      }
+
+      setInputError({ message: '', isError: false });
       setSearchValue('');
     } catch (err) {
       console.log(JSON.stringify(err));
@@ -77,21 +57,17 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleNavigateDetails = useCallback(
-    (name: string) => {
-      navigation.navigate('Details', {repository: name});
-    },
-    [navigation],
-  );
-
   return (
     <KeyboardAvoidingView
-      style={{flex: 1}}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      style={{ flex: 1 }}
+      behavior={Platform.select({
+        ios: 'padding',
+        default: undefined
+      })}
       enabled>
       <ScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{flex: 1}}>
+        contentContainerStyle={{ flex: 1 }}>
         <Container>
           <Title>Explore repositórios no GitHub</Title>
 
@@ -109,18 +85,7 @@ const Dashboard: React.FC = () => {
             <ButtonText>Adicionar</ButtonText>
           </Button>
 
-          <Content>
-            {repositories.map((repositorie, i) => (
-              <RepositoriesContainer
-                key={i}
-                onPress={() => handleNavigateDetails(repositorie.full_name)}>
-                <RepositoriesAvatar
-                  source={{uri: repositorie.owner.avatar_url}}
-                />
-                <RepositoriesName>{repositorie.full_name}</RepositoriesName>
-              </RepositoriesContainer>
-            ))}
-          </Content>
+          <DashboardContent />
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>
