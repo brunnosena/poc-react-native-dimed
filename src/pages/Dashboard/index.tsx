@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import api from '../../services/api';
 import Input from '../../components/Input';
 import DashboardContent from './DashboardContent';
+import { useNavigation } from '@react-navigation/native';
 import {
   Container,
   Title,
@@ -26,6 +27,7 @@ interface objError {
 
 const Dashboard: React.FC = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const repos: Repository[] = useSelector((store: any) => store.repos);
   const [searchValue, setSearchValue] = useState('');
   const [inputError, setInputError] = useState<objError>({
@@ -56,6 +58,10 @@ const Dashboard: React.FC = () => {
     }
   };
 
+  const goToHomeScreen = () => {
+    navigation.navigate('UserSearch');
+  }
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -81,6 +87,10 @@ const Dashboard: React.FC = () => {
           <MessageError>{inputError.message}</MessageError>
 
           <Button onPress={handleAddRepositories}>
+            <ButtonText>Adicionar</ButtonText>
+          </Button>
+          
+          <Button onPress={goToHomeScreen}>
             <ButtonText>Adicionar</ButtonText>
           </Button>
 

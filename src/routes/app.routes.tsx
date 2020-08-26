@@ -9,6 +9,7 @@ import Details from '../pages/Details';
 import Profile from '../pages/Profile';
 
 import Logo from '../assets/img/logo.png';
+import DashboardHome from '../pages/DashboardHome';
 
 const App = createStackNavigator();
 
@@ -50,6 +51,15 @@ const AppRoutes: React.FC = () => (
         }}
         name="Profile"
         component={Profile}
+      />
+      <App.Screen
+        options={{
+          headerTitle: () => <Text>Busca por usuário</Text>,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {alignSelf: 'center', justifyContent: 'center'},
+        }}
+        name="UserSearch"
+        component={DashboardHome}
       />
     </App.Navigator>
   </NavigationContainer>

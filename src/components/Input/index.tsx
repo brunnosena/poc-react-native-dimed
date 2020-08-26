@@ -21,7 +21,7 @@ const Input: React.FC<InputProps> = ({error, ...rest}) => {
       ref={inputElementRef}
       keyboardAppearance="dark"
       placeholderTextColor="#666360"
-      onChangeText={(value) => {
+      onChangeText={(value: any) => {
         inputValueRef.current.value = value;
       }}
       {...rest}
