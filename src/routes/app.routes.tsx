@@ -44,9 +44,20 @@ const AppRoutes: React.FC = () => (
       />
       <App.Screen
         options={{
-          headerTitle: () => <Text>Issue</Text>,
+          headerTitle: () => (
+            <Text
+              style={{
+                fontFamily: 'Poppins-Regular',
+                fontSize: 18,
+              }}>
+              Issue
+            </Text>
+          ),
           headerTitleAlign: 'center',
-          headerTitleStyle: {alignSelf: 'center', justifyContent: 'center'},
+          headerTitleStyle: {
+            alignSelf: 'center',
+            justifyContent: 'center',
+          },
         }}
         name="Profile"
         component={Profile}

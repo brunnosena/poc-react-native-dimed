@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {useRoute, useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Feather';
 import api from '../../services/api';
 
 import {
   Container,
+  ViewTitle,
   Title,
   Name,
   RepositoryInfo,
@@ -12,11 +14,11 @@ import {
   CardCount,
   CardDescription,
   Issues,
+  IssueInfo,
   IssueDetail,
   IssueDetailTitle,
   IssueDetailText,
 } from './styles';
-import {View} from 'react-native';
 
 interface RepositoryParams {
   repository: string;
@@ -74,18 +76,9 @@ const Details: React.FC = () => {
   return (
     <Container>
       <Title>
-        <View
-          style={{
-            backgroundColor: '#000',
-            marginTop: 32,
-            paddingLeft: 16,
-            paddingRight: 16,
-            paddingTop: 8,
-            paddingBottom: 8,
-            borderRadius: 24,
-          }}>
+        <ViewTitle>
           <Name>{routeParams.repository}</Name>
-        </View>
+        </ViewTitle>
       </Title>
 
       {repository ? (
@@ -112,10 +105,13 @@ const Details: React.FC = () => {
           <IssueDetail
             key={issue.id}
             onPress={() => handleGoToProfile(issue.html_url)}>
-            <IssueDetailTitle numberOfLines={1}>{issue.title}</IssueDetailTitle>
-            <IssueDetailText style={{alignSelf: 'flex-end'}}>
-              {issue.user.login}
-            </IssueDetailText>
+            <IssueInfo>
+              <IssueDetailTitle numberOfLines={1}>
+                {issue.title}
+              </IssueDetailTitle>
+              <IssueDetailText>Opened by: {issue.user.login}</IssueDetailText>
+            </IssueInfo>
+            <Icon name="chevron-right" size={36} color="#39B100" />
           </IssueDetail>
         ))}
       </Issues>

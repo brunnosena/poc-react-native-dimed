@@ -11,6 +11,7 @@ export const TextInput = styled.TextInput<TextInputProps>`
   border-radius: 10px;
   border-width: 2px;
   padding: 16px;
+  font-family: 'Poppins-Regular';
 
   border-width: 2px;
   border-color: #232129;
