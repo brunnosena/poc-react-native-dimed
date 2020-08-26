@@ -100,6 +100,8 @@ const Details: React.FC = () => {
         <LoadingMessage>Carregando...</LoadingMessage>
       )}
 
+      <Title>Issues</Title>
+
       <Issues>
         {issues.map((issue) => (
           <IssueDetail
