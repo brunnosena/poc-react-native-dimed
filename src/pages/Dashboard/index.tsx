@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
-import { KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import React, {useState} from 'react';
+import {KeyboardAvoidingView, ScrollView, Platform} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
 import api from '../../services/api';
 import Input from '../../components/Input';
 import DashboardContent from './DashboardContent';
-import {
-  Container,
-  Title,
-  MessageError,
-  Button,
-  ButtonText,
-} from './styles';
+import {Container, Title, MessageError, Button, ButtonText} from './styles';
+
 export interface Repository {
   full_name: string;
   description: string;
@@ -19,6 +14,7 @@ export interface Repository {
     avatar_url: string;
   };
 }
+
 interface objError {
   message: string;
   isError: boolean;
@@ -34,18 +30,23 @@ const Dashboard: React.FC = () => {
   });
 
   const handleAddRepositories = async () => {
-    try {      
-      if (!repos.find(repo => repo.full_name.toUpperCase() === searchValue.toUpperCase())) {
-        const { data } = await api.get<Repository>(`repos/${searchValue}`);
+    try {
+      if (
+        !repos.find(
+          (repo) => repo.full_name.toUpperCase() === searchValue.toUpperCase(),
+        )
+      ) {
+        const {data} = await api.get<Repository>(`repos/${searchValue}`);
 
         dispatch({
-          type: 'ADD_REPO', payload: {
-            repo: data
-          }
+          type: 'ADD_REPO',
+          payload: {
+            repo: data,
+          },
         });
       }
 
-      setInputError({ message: '', isError: false });
+      setInputError({message: '', isError: false});
       setSearchValue('');
     } catch (err) {
       console.log(JSON.stringify(err));
@@ -58,15 +59,15 @@ const Dashboard: React.FC = () => {
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={{flex: 1}}
       behavior={Platform.select({
         ios: 'padding',
-        default: undefined
+        default: undefined,
       })}
       enabled>
       <ScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ flex: 1 }}>
+        contentContainerStyle={{flex: 1}}>
         <Container>
           <Title>Explore repositórios no GitHub</Title>
 
@@ -77,10 +78,11 @@ const Dashboard: React.FC = () => {
             placeholder="Digite o usuário/repositório"
             onChangeText={(value) => setSearchValue(value)}
             error={inputError.isError}
+            testID="user-repo"
           />
           <MessageError>{inputError.message}</MessageError>
 
-          <Button onPress={handleAddRepositories}>
+          <Button testID={'button'} onPress={handleAddRepositories}>
             <ButtonText>Adicionar</ButtonText>
           </Button>
 

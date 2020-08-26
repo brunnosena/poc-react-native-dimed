@@ -27,6 +27,14 @@ export const RepositoriesList = styled.View`
   width: 100%;
 `;
 
+export const NotRepositories = styled.Text`
+  font-family: 'Poppins-Regular';
+  font-size: 16px;
+  color: #32264d;
+  text-align: center;
+  margin-top: 10px;
+`;
+
 export const RepositoriesContainer = styled(RectButton)`
   background: #ffffff;
   flex-direction: row;

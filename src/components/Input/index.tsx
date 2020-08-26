@@ -24,6 +24,7 @@ const Input: React.FC<InputProps> = ({error, ...rest}) => {
       onChangeText={(value) => {
         inputValueRef.current.value = value;
       }}
+      testID="input-search"
       {...rest}
     />
   );

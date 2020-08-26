@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import {
   Content,
   RepositoriesContainer,
+  NotRepositories,
   RepositorieInfo,
   RepositoriesAvatar,
   RepositoriesName,
@@ -25,6 +26,9 @@ const DashboardContent: React.FC = () => {
 
   return (
     <Content>
+      {repos.length === 0 && (
+        <NotRepositories>Não há repositórios adicionados.</NotRepositories>
+      )}
       {repos.map((repositorie, i) => (
         <RepositoriesContainer
           key={i}
