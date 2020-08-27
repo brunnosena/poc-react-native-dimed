@@ -29,6 +29,8 @@ build/
 local.properties
 *.iml
 
+coverage/
+
 # Visual Studio Code
 #
 .vscode/

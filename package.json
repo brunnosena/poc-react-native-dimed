@@ -7,6 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
+    "test:coverage": "yarn jest --coverage --watchAll false",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
@@ -24,6 +25,7 @@
     "react-native-vector-icons": "^7.0.0",
     "react-native-webview": "^10.7.0",
     "react-redux": "^7.2.1",
+    "react-scripts": "^3.4.3",
     "redux": "^4.0.5",
     "styled-components": "^5.1.1"
   },
@@ -56,6 +58,10 @@
   },
   "jest": {
     "preset": "react-native",
+    "collectCoverageFrom": [
+      "src/pages/**/*.tsx",
+      "src/components/**/*.tsx"
+    ],
     "setupFilesAfterEnv": [
       "@testing-library/jest-native/extend-expect"
     ],
