@@ -1,13 +1,11 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {NavigationContainer} from '@react-navigation/native';
-
-import {Image, Text} from 'react-native';
-
-import Dashboard from '../pages/Dashboard';
-import Details from '../pages/Details';
-import Profile from '../pages/Profile';
-
+import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { Image, Text } from 'react-native';
+import Dashboard from 'pages/Dashboard';
+import Details from 'pages/Details';
+import Profile from 'pages/Profile';
+import OwnerRepositories from 'pages/OwnerRepositories';
 import Logo from '../assets/img/logo.png';
 
 const App = createStackNavigator();
@@ -17,13 +15,14 @@ const AppRoutes: React.FC = () => (
     <App.Navigator
       screenOptions={{
         headerShown: true,
-        cardStyle: {backgroundColor: '#EBEEF8'},
+        cardStyle: { backgroundColor: '#EBEEF8' },
       }}
-      initialRouteName="Dashboard">
+      initialRouteName="Dashboard"
+    >
       <App.Screen
         options={{
           headerTitleAlign: 'center',
-          headerTitleStyle: {alignSelf: 'center', justifyContent: 'center'},
+          headerTitleStyle: { alignSelf: 'center', justifyContent: 'center' },
           headerTitle: () => <Image source={Logo} />,
         }}
         name="Dashboard"
@@ -32,7 +31,7 @@ const AppRoutes: React.FC = () => (
       <App.Screen
         options={{
           headerTitleAlign: 'center',
-          headerTitleStyle: {alignSelf: 'center', justifyContent: 'center'},
+          headerTitleStyle: { alignSelf: 'center', justifyContent: 'center' },
           headerTitle: () => <Image source={Logo} />,
           headerBackTitleVisible: false,
           headerLeftContainerStyle: {
@@ -49,7 +48,8 @@ const AppRoutes: React.FC = () => (
               style={{
                 fontFamily: 'Poppins-Regular',
                 fontSize: 18,
-              }}>
+              }}
+            >
               Issue
             </Text>
           ),
@@ -61,6 +61,27 @@ const AppRoutes: React.FC = () => (
         }}
         name="Profile"
         component={Profile}
+      />
+      <App.Screen
+        options={{
+          headerTitle: () => (
+            <Text
+              style={{
+                fontFamily: 'Poppins-Regular',
+                fontSize: 18,
+              }}
+            >
+              Repositórios
+            </Text>
+          ),
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            alignSelf: 'center',
+            justifyContent: 'center',
+          },
+        }}
+        name="Repositories"
+        component={OwnerRepositories}
       />
     </App.Navigator>
   </NavigationContainer>

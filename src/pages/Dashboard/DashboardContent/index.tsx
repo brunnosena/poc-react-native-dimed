@@ -1,5 +1,5 @@
-import React, {useCallback} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useCallback } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Feather';
 import {
   Content,
@@ -9,17 +9,17 @@ import {
   RepositoriesAvatar,
   RepositoriesName,
   RepositoriesDescription,
-} from '../styles';
-import {useSelector} from 'react-redux';
-import {Repository} from '..';
+} from 'pages/Dashboard/styles';
+import { useSelector } from 'react-redux';
+import Repository from 'types/Repository';
 
 const DashboardContent: React.FC = () => {
-  const repos: Repository[] = useSelector((state: any) => state.repos);
+  const repos: Repository[] = useSelector((state: any) => state.github.repos);
   const navigation = useNavigation();
 
   const handleNavigateDetails = useCallback(
     (name: string) => {
-      navigation.navigate('Details', {repository: name});
+      navigation.navigate('Details', { repository: name });
     },
     [navigation],
   );
@@ -33,7 +33,7 @@ const DashboardContent: React.FC = () => {
         <RepositoriesContainer
           key={i}
           onPress={() => handleNavigateDetails(repositorie.full_name)}>
-          <RepositoriesAvatar source={{uri: repositorie.owner.avatar_url}} />
+          <RepositoriesAvatar source={{ uri: repositorie.owner.avatar_url }} />
           <RepositorieInfo>
             <RepositoriesName>{repositorie.full_name}</RepositoriesName>
             <RepositoriesDescription>

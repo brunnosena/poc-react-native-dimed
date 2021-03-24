@@ -1,73 +1,61 @@
-import React, {useState} from 'react';
-import {KeyboardAvoidingView, ScrollView, Platform} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import api from '../../services/api';
-import Input from '../../components/Input';
-import DashboardContent from './DashboardContent';
-import {Container, Title, MessageError, Button, ButtonText} from './styles';
+import React, { useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import Input from 'components/Input';
+import RepoOwner from 'types/RepoOwner';
+import { getOwnerDetails } from 'services/features/github/GithubService';
+import {
+  Button,
+  ButtonText,
+  Container,
+  MessageError,
+  Title,
+} from 'pages/Dashboard/styles';
+import RepoOwnerBox from 'pages/Dashboard/RepoOwnerBox';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
-export interface Repository {
-  full_name: string;
-  description: string;
-  owner: {
-    login: string;
-    avatar_url: string;
-  };
-}
-
-interface objError {
+export interface objError {
   message: string;
   isError: boolean;
 }
 
 const Dashboard: React.FC = () => {
-  const dispatch = useDispatch();
-  const repos: Repository[] = useSelector((store: any) => store.repos);
   const [searchValue, setSearchValue] = useState('');
+  const [repoOwner, setRepoOwner] = useState<RepoOwner>();
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [inputError, setInputError] = useState<objError>({
     message: '',
     isError: false,
   });
 
-  const handleAddRepositories = async () => {
-    try {
-      if (
-        !repos.find(
-          (repo) => repo.full_name.toUpperCase() === searchValue.toUpperCase(),
-        )
-      ) {
-        const {data} = await api.get<Repository>(`repos/${searchValue}`);
+  const handleOwnerButtonPress = () => {
+    dispatch({
+      type: 'github/add',
+      payload: repoOwner,
+    });
+    navigation.navigate('Repositories', {
+      repoOwner,
+    });
+  };
 
-        dispatch({
-          type: 'ADD_REPO',
-          payload: {
-            repo: data,
-          },
-        });
-      }
-
-      setInputError({message: '', isError: false});
-      setSearchValue('');
-    } catch (err) {
-      console.log(JSON.stringify(err));
-      setInputError({
-        message: 'Erro na busca por esse repositório',
-        isError: true,
-      });
-    }
+  const handleAddRepositories = () => {
+    if (searchValue) getOwnerDetails(searchValue, setInputError, setRepoOwner);
   };
 
   return (
     <KeyboardAvoidingView
-      style={{flex: 1}}
+      style={{ flex: 1 }}
       behavior={Platform.select({
         ios: 'padding',
         default: undefined,
       })}
-      enabled>
+      enabled
+    >
       <ScrollView
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{flex: 1}}>
+        contentContainerStyle={{ flex: 1 }}
+      >
         <Container>
           <Title>Explore repositórios no GitHub</Title>
 
@@ -75,18 +63,17 @@ const Dashboard: React.FC = () => {
             name="userRepo"
             placeholderTextColor="#B7B7CC"
             value={searchValue}
-            placeholder="Digite o usuário/repositório"
+            placeholder="Digite o usuário"
             onChangeText={(value) => setSearchValue(value)}
             error={inputError.isError}
             testID="user-repo"
           />
           <MessageError>{inputError.message}</MessageError>
 
-          <Button testID={'button'} onPress={handleAddRepositories}>
+          <Button testID="button" onPress={handleAddRepositories}>
             <ButtonText>Adicionar</ButtonText>
           </Button>
-
-          <DashboardContent />
+          {repoOwner && <RepoOwnerBox repoOwner={repoOwner} onPress={handleOwnerButtonPress} />}
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>
